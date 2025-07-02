@@ -80,7 +80,7 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
         print(f"處理影像時發生錯誤：{e}")
         return []
 
-image_file = 'test_images/test_image.jpg'
+image_file = 'test_images/test_image2.jpg'
     # 範例：假設您的照片中黑點面積大約在 50 到 500 之間
 dots = detect_black_dots(image_file, min_area=0, max_area=500)
 print(f"偵測到 {len(dots)} 個黑點。")
