@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def detect_black_dots(image_path, min_area=10, max_area=1000):
     """
@@ -45,7 +46,6 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
 
         black_dot_coordinates = []
         output_image = image.copy() # 複製一份影像用於繪圖顯示
-        output_image = cv2.resize(output_image, (resize_width, int(resize_hight))) # 調整顯示大小
 
         # 遍歷每個偵測到的輪廓
         for contour in contours:
@@ -62,16 +62,17 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
                     black_dot_coordinates.append((cX, cY))
 
                     # 在影像上繪製圓圈標示黑點，並顯示座標 (用於視覺化確認)
-                    cv2.circle(output_image, (int(cX / 4), int(cY / 4)), 5, (0, 255, 0), -1) # 綠色圓點
-                    cv2.putText(output_image, f"({cX},{cY})", (int((cX + 10) / 4), int((cY + 10) / 4)),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.2, (0, 0, 255), 1) # 紅色文字
+                    cv2.circle(output_image, (cX, cY), 5, (255, 0, 0), -1)
+                    cv2.putText(output_image, f"({cX},{cY})", (cX + 10, cY + 10),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1) # 紅色文字
 
-        # 顯示處理後的影像 (可選)
-        cv2.imshow("Original Image", image)
-        cv2.imshow("Binary Image", binary_image)
-        cv2.imshow("Detected Black Dots", output_image)
-        cv2.waitKey(0) # 按任意鍵關閉視窗
-        cv2.destroyAllWindows()
+        plt.figure(1)
+        plt.imshow(cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB))
+        plt.figure(2)
+        plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        plt.figure(3)
+        plt.imshow(cv2.cvtColor(binary_image, cv2.COLOR_BGR2RGB))
+        plt.show()
 
         return black_dot_coordinates
 
