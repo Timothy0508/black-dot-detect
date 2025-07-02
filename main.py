@@ -64,7 +64,7 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
                     # 在影像上繪製圓圈標示黑點，並顯示座標 (用於視覺化確認)
                     cv2.circle(output_image, (cX, cY), 5, (255, 0, 0), -1)
                     cv2.putText(output_image, f"({cX},{cY})", (cX + 10, cY + 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 1) # 紅色文字
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 1) # 紅色文字
 
         plt.figure(1)
         plt.imshow(cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB))
