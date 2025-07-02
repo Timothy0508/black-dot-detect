@@ -21,6 +21,9 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
         if image is None:
             print(f"錯誤：無法載入影像，請檢查路徑：{image_path}")
             return []
+        resize_hight = int(image.shape[0]/4)
+        resize_width = int(image.shape[1]/4)
+
 
         # 2. 灰階轉換
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -42,6 +45,7 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
 
         black_dot_coordinates = []
         output_image = image.copy() # 複製一份影像用於繪圖顯示
+        output_image = cv2.resize(output_image, (resize_width, int(resize_hight))) # 調整顯示大小
 
         # 遍歷每個偵測到的輪廓
         for contour in contours:
@@ -58,10 +62,9 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
                     black_dot_coordinates.append((cX, cY))
 
                     # 在影像上繪製圓圈標示黑點，並顯示座標 (用於視覺化確認)
-                    cv2.circle(output_image, (cX, cY), 5, (0, 255, 0), -1) # 綠色圓點
-                    cv2.putText(output_image, f"({cX},{cY})", (cX + 10, cY + 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1) # 紅色文字
-        output_image = cv2.resize(output_image, (int(output_image.shape[1]/4), int(output_image.shape[0]/4))) # 調整顯示大小
+                    cv2.circle(output_image, (int(cX / 4), int(cY / 4)), 5, (0, 255, 0), -1) # 綠色圓點
+                    cv2.putText(output_image, f"({cX},{cY})", (int((cX + 10) / 4), int((cY + 10) / 4)),
+                                cv2.FONT_HERSHEY_SIMPLEX, 0.2, (0, 0, 255), 1) # 紅色文字
 
         # 顯示處理後的影像 (可選)
         cv2.imshow("Original Image", image)
@@ -76,7 +79,7 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
         print(f"處理影像時發生錯誤：{e}")
         return []
 
-image_file = "C:/Users/97011/Downloads/2025_07_02 11_11 AM Office Lens (1).jpg"
+image_file = 'test_images/test_image.jpg'
     # 範例：假設您的照片中黑點面積大約在 50 到 500 之間
 dots = detect_black_dots(image_file, min_area=0, max_area=500)
 print(f"偵測到 {len(dots)} 個黑點。")
