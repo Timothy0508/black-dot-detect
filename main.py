@@ -45,6 +45,8 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
         contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         black_dot_coordinates = []
+        dot_x = []
+        dot_y = []
         output_image = image.copy() # 複製一份影像用於繪圖顯示
 
         # 遍歷每個偵測到的輪廓
@@ -60,6 +62,8 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
                     black_dot_coordinates.append((cX, cY))
+                    dot_x.append(cX)
+                    dot_y.append(cY)
 
                     # 在影像上繪製圓圈標示黑點，並顯示座標 (用於視覺化確認)
                     cv2.circle(output_image, (cX, cY), 5, (255, 0, 0), -1)
@@ -72,6 +76,8 @@ def detect_black_dots(image_path, min_area=10, max_area=1000):
         plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         plt.figure(3)
         plt.imshow(cv2.cvtColor(binary_image, cv2.COLOR_BGR2RGB))
+        plt.figure(4)
+        plt.scatter(dot_x, dot_y)
         plt.show()
 
         return black_dot_coordinates
